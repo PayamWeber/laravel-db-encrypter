@@ -1,6 +1,16 @@
-# Laravel Db Encrypter Package
+# Laravel Db Encrypter Package For Mongodb
 
 This package was created to encrypt and decrypt values of Eloquent model attributes.
+
+&#x1F537; &#x1F537; &#x1F537; &#x1F537;
+
+&#x1F537; &#x1F537; &#x1F537; &#x1F537; 
+
+### Works on jenssegers/mongodb now
+
+&#x1F537; &#x1F537; &#x1F537; &#x1F537;
+
+&#x1F537; &#x1F537; &#x1F537; &#x1F537;
 
 ## Donnations
 If You think this package helped You, please donate. Thank You.
@@ -33,7 +43,7 @@ On save values will be encrypted and everything will work fine.
 Via Composer command line:
 
 ```bash
-$ composer require betterapp/laravel-db-encrypter
+$ composer require payamjafari/laravel-db-encrypter
 ```
 
 ## Usage
@@ -44,18 +54,18 @@ $ composer require betterapp/laravel-db-encrypter
 For example:
 
 ```php
-    
-    use betterapp\LaravelDbEncrypter\Traits\EncryptableDbAttribute;
+use Jenssegers\Mongodb\Eloquent\Model;
+use betterapp\LaravelDbEncrypter\Traits\EncryptableDbAttribute;
 
-    class Client extends Eloquent {
-        use EncryptableDbAttribute;
-       
-        /** @var array The attributes that should be encrypted/decrypted */
-        protected $encryptable = [
-            'id_number', 
-            'email',
-        ];
-    }
+class Client extends Model {
+    use EncryptableDbAttribute;
+
+    /** @var array The attributes that should be encrypted/decrypted */
+    protected array $encryptable = [
+        'id_number', 
+        'email',
+    ];
+}
 ```
 
 3. You can use Laravel's original $casts to cast decrypted values
