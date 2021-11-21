@@ -1,5 +1,5 @@
 {
-  "name": "betterapp/laravel-db-encrypter",
+  "name": "payamjafari/laravel-db-encrypter",
   "description": "Provides database model attribute encryption/decryption",
   "keywords": [
     "attribute",
