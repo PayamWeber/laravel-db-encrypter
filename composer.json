@@ -21,12 +21,14 @@
     "laravel model encryption",
     "laravel model encrypter",
     "laravel attribute encrypter",
+    "laravel mongodb attribute encrypter",
+    "mongodb",
     "laravel attribute encryption"
   ],
   "license": "MIT",
   "autoload": {
     "psr-4": {
-      "betterapp\\LaravelDbEncrypter\\": "src/"
+      "payamweber\\LaravelDbEncrypter\\": "src/"
     }
   },
   "authors": [
@@ -35,11 +37,18 @@
       "email": "daniel@betterapp.net",
       "homepage": "https://github.com/betterapp",
       "role": "Developer"
+    },
+    {
+      "name": "Payam Jafari",
+      "email": "payam.jafari12@gmail.com",
+      "homepage": "https://payamjafari.ir",
+      "role": "Developer"
     }
   ],
   "require": {
     "php": ">=7.1",
-    "laravel/framework": "^6.0|^7.0|^8.0"
+    "laravel/framework": "^6.0|^7.0|^8.0",
+    "jenssegers/mongodb": ">=3.7"
   },
   "minimum-stability": "stable"
 }
