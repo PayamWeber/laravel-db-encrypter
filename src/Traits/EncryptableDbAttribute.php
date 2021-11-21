@@ -5,6 +5,10 @@ namespace payamweber\LaravelDbEncrypter\Traits;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Contracts\Encryption\EncryptException;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use MongoDB\BSON\Binary;
+use MongoDB\BSON\ObjectID;
 
 /**
  * Trait EncryptableDbAttribute
