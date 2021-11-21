@@ -1,6 +1,6 @@
 <?php
 
-namespace betterapp\LaravelDbEncrypter\Traits;
+namespace payamweber\LaravelDbEncrypter\Traits;
 
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Contracts\Encryption\EncryptException;
@@ -53,19 +53,28 @@ trait EncryptableDbAttribute
     }
 
     /**
-     * @param string $key
-     * @param mixed  $value
-     *
-     * @return mixed
+     * @inheritdoc
      */
     public function setAttribute($key, $value)
     {
-        if (is_null($value) || !in_array($key, $this->encryptable)) {
-            return parent::setAttribute($key, $value);
+        // Convert _id to ObjectID.
+        if ($key == '_id' && is_string($value)) {
+            $builder = $this->newBaseQueryBuilder();
+
+            $value = $builder->convertKey($value);
+        } // Support keys in dot notation.
+        elseif (Str::contains($key, '.')) {
+            if (in_array($key, $this->getDates()) && $value) {
+                $value = $this->fromDateTime($value);
+            }
+
+            Arr::set($this->attributes, $key, $value);
+
+            return;
         }
 
-        if ($this->isJsonCastable($key) && !is_null($value)) {
-            $value = $this->castAttributeAsJson($key, $value);
+        if (is_null($value) || !in_array($key, $this->encryptable)) {
+            return parent::setAttribute($key, $value);
         }
 
         $value = $this->encrypt($value);
@@ -104,6 +113,25 @@ trait EncryptableDbAttribute
         // when we need to array or JSON the model for convenience to the coder.
         foreach ($this->getArrayableAppends() as $key) {
             $attributes[$key] = $this->mutateAttributeForArray($key, null);
+        }
+
+        // Because the original Eloquent never returns objects, we convert
+        // MongoDB related objects to a string representation. This kind
+        // of mimics the SQL behaviour so that dates are formatted
+        // nicely when your models are converted to JSON.
+        foreach ($attributes as $key => &$value) {
+            if ($value instanceof ObjectID) {
+                $value = (string) $value;
+            } elseif ($value instanceof Binary) {
+                $value = (string) $value->getData();
+            }
+        }
+
+        // Convert dot-notation dates.
+        foreach ($this->getDates() as $key) {
+            if (Str::contains($key, '.') && Arr::has($attributes, $key)) {
+                Arr::set($attributes, $key, (string) $this->asDateTime(Arr::get($attributes, $key)));
+            }
         }
 
         return $attributes;
